@@ -8,9 +8,7 @@
 <script>
 import PokemonPicture from "@/components/PokemonPicture.vue";
 import PokemonOptions from "@/components/PokemonOptions.vue";
-import getPoke from "@/helpers/getPokemonOptions";
-
-getPoke();
+import getPokemonOptions from "@/helpers/getPokemonOptions";
 export default {
   components: { PokemonPicture, PokemonOptions },
 };
