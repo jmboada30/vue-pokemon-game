@@ -7,7 +7,15 @@
       :pokemonId="pokemon.id"
       :showPokemon="showPokemon"
     ></pokemon-picture>
-    <pokemon-options :pokemons="pokemonArr" @selection="checkAnswer"></pokemon-options>
+    <pokemon-options
+      :pokemons="pokemonArr"
+      @selection="checkAnswer"
+    ></pokemon-options>
+
+    <template class="fade-in" v-if="showAnswer">
+      <h2>{{ message }}</h2>
+      <button @click="newGame">Nuevo juego</button>
+    </template>
   </div>
 </template>
 
@@ -22,25 +30,33 @@ export default {
       pokemonArr: [],
       pokemon: null,
       showPokemon: false,
+      showAnswer: false,
+      message: "",
     };
   },
   methods: {
     async mixPokemonArray() {
       this.pokemonArr = await getPokemonOptions();
-      this.selectPokemon();
-    },
-    selectPokemon() {
       const index = Math.floor(Math.random() * 4);
       this.pokemon = this.pokemonArr[index];
     },
     checkAnswer(pokemonId) {
       this.showPokemon = true;
-      if(pokemonId === this.pokemon.id) {
-        alert('YES')
+      this.showAnswer = true;
+      if (pokemonId === this.pokemon.id) {
+        this.message = `Correcto, ${this.pokemon.name}`;
       } else {
-        alert('NOO')
+        this.message = `Oops, era ${this.pokemon.name}`;
       }
-    }
+    },
+    newGame() {
+      this.pokemonArr = [];
+      this.pokemon = null;
+      this.showPokemon = false;
+      this.showAnswer = false;
+      this.message = "";
+      this.mixPokemonArray();
+    },
   },
   mounted() {
     this.mixPokemonArray();
