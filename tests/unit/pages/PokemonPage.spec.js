@@ -48,11 +48,34 @@ describe('PokemonPage Page', () => {
 
     const pokemonPicture = wrapper.find('pokemon-picture-stub');
     const pokemonOptions = wrapper.find('pokemon-options-stub');
-    console.log(pokemonOptions.attributes());
 
     expect(pokemonPicture.exists()).toBe(true);
     expect(pokemonOptions.exists()).toBe(true);
     expect(pokemonPicture.attributes('pokemonid')).toBe('1');
     expect(pokemonOptions.attributes('pokemons')).toBeDefined();
+  });
+
+  test('debe funcionar checkAnswer', async () => {
+    const wrapper = shallowMount(PokemonPage, {
+      data() {
+        return {
+          pokemonArr: pokemonArr,
+          pokemon: pokemonArr[0],
+          showPokemon: false,
+          showAnswer: false,
+          message: '',
+        };
+      },
+    });
+
+    await wrapper.vm.checkAnswer(pokemonArr[0].id);
+
+    expect(wrapper.find('h2').exists()).toBeTruthy();
+    expect(wrapper.vm.showPokemon).toBe(true);
+    expect(wrapper.find('h2').text()).toBe(`Correcto, ${pokemonArr[0].name}`)
+
+    await wrapper.vm.checkAnswer(2);
+
+    expect(wrapper.vm.message).toBe(`Oops, era ${wrapper.vm.pokemon.name}`)
   });
 });
